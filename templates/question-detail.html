@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-content full-width-content" style="min-height: 608px;">
+    <section class="section">
+      <div class="section-body">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Savollar to'plamini yaratish</h4>
+              </div>
+              <form method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="question-name">Savol nomi</label>
+                      <input type="text" class="form-control" name="question_name" id="question-name" placeholder="Savolni kiriting">
+                  </div>
+
+                  <!-- Variantlarni qo'shish -->
+                  <div class="container mt-4">
+                      <div id="option-container">
+                          <div class="input-group mb-2 option-group">
+                              <input type="text" name="option_name" class="form-control" placeholder="Variant nomini kiriting">
+                              <input type="checkbox" name="correct_option" class="form-check-input ms-2" title="To'g'ri variantmi?">
+                              <div class="input-group-prepend">
+                                  <div class="input-group-text bg-primary text-light add-option" style="cursor: pointer;">
+                                      <i class="fas fa-plus"></i>
+                                  </div>
+                                  <div class="input-group-text bg-danger text-light ms-1 remove-option" style="cursor: pointer;">
+                                      <i class="fas fa-trash"></i>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <br>
+                  <button type="submit" class="btn btn-primary">Yaratish</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+  .full-width-content {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background-color: #f8f9fa;--
+  }
+</style>
+{% endblock %}
+
+{% block js %}
+<script>
+  // Variant qo'shish funksiyasi
+  function addOption() {
+      var newOptionGroup = document.createElement('div');
+      newOptionGroup.className = 'input-group mb-2 option-group';
+      newOptionGroup.innerHTML = `
+          <input type="text" name="option_name" class="form-control" placeholder="Variant nomini kiriting">
+          <input type="checkbox" name="correct_option" class="form-check-input ms-2" title="To'g'ri variantmi?">
+          <div class="input-group-prepend">
+              <div class="input-group-text bg-primary text-light add-option" style="cursor: pointer;">
+                  <i class="fas fa-plus"></i>
+              </div>
+              <div class="input-group-text bg-danger text-light ms-1 remove-option" style="cursor: pointer;">
+                  <i class="fas fa-trash"></i>
+              </div>
+          </div>
+      `;
+      document.getElementById('option-container').appendChild(newOptionGroup);
+      addEventListenersToButtons();
+  }
+
+  // Variant olib tashlash funksiyasi
+  function removeOption(event) {
+      event.target.closest('.option-group').remove();
+  }
+
+  // Tugmalar uchun boshlang'ich event listenerlar
+  function addEventListenersToButtons() {
+      document.querySelectorAll('.add-option').forEach(function(button) {
+          button.removeEventListener('click', addOption);
+          button.addEventListener('click', addOption);
+      });
+
+      document.querySelectorAll('.remove-option').forEach(function(button) {
+          button.removeEventListener('click', removeOption);
+          button.addEventListener('click', removeOption);
+      });
+  }
+
+  // Boshlang'ich chaqiruv
+  addEventListenersToButtons();
+</script>
+{% endblock %}
