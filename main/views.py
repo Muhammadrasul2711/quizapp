@@ -49,5 +49,19 @@ def questionCreate(request, id):
     return render(request, 'question-create.html', {'quiz':quiz})
 
 def questionDetail(request, id):
-    question = models.Option.objects.get(id=id)
+    question = models.Question.objects.get(id=id)
     return render(request,'question-detail.html',{'question':question})
+
+def optionCreate(request, id):
+    question = models.Question.objects.get(id=id)
+    model=models.Option.objects.filter(question=question)
+    return render(request,'option-creat.html',{'question':question,'model':model})
+
+
+def optionDelete(request, id,Option):
+    question = models.Question.objects.get(id=id)
+    model=models.Option.objects.filter(question=question)
+    model.delete()
+    return redirect('questionDetail', id)
+
+
